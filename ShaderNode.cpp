@@ -2,7 +2,7 @@
 // Created by Göksu Güvendiren on 01/08/2017.
 //
 
-#include "Shader_Node.h"
+#include "ShaderNode.h"
 #include "GL/GGL.h"
 
 ppl::Blur::Blur(const gl::Window& win) : window(win)

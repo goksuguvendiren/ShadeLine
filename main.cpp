@@ -3,7 +3,7 @@
 #include <boost/any.hpp>
 
 #include "Node.hpp"
-#include "Shader_Node.h"
+#include "ShaderNode.h"
 
 int main()
 {

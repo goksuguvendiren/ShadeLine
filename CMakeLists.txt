@@ -10,7 +10,7 @@ find_package(GLEW REQUIRED)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES main.cpp Node.cpp Node.hpp mytypes.h Shader_Node.cpp Shader_Node.h GL/Shader.cpp GL/Shader.h GL/Window.cpp GL/Window.h GL/Texture.cpp GL/Texture.h GL/Program.cpp GL/Program.h GL/GGL.h)
+set(SOURCE_FILES main.cpp Node.cpp Node.hpp mytypes.h ShaderNode.cpp ShaderNode.h GL/Shader.cpp GL/Shader.h GL/Window.cpp GL/Window.h GL/Texture.cpp GL/Texture.h GL/Program.cpp GL/Program.h GL/GGL.h)
 add_executable(Pipeline ${SOURCE_FILES})
 
 target_compile_definitions(Pipeline PUBLIC PIPELINE_NAMESPACE=ppl)
