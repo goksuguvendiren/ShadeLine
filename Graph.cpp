@@ -10,8 +10,7 @@ void ppl::Graph::Run()
     // wait for the inputs to be ready
 
     // execute the node
-    outputs = curNode->Exec(inputs);
-    curNode->Processed();
+    auto outputs = curNode->Exec(inputs);
     inputs.clear();
 
     // bad guzu :
@@ -36,10 +35,15 @@ void ppl::Graph::Init()
     {
         if (!std::any_of(edges.begin(), edges.end(), [&node](auto edge){ return edge.destination_node == node; }))
         {
-            std::cerr << node->Name() << '\n';
+//            std::cerr << node->Name() << '\n';
             curNode = node;
             inputs = {};
             return;
         }
     }
+}
+
+bool ppl::Graph::Complete()
+{
+    return std::all_of(nodes.begin(), nodes.end(), [](auto& node){ return node->IsProcessed(); });
 }

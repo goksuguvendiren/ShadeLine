@@ -1,5 +1,5 @@
 //
-// Created by Göksu Güvendiren on 01/08/2017.
+// Created by Göksu Güvendiren on 04/08/2017.
 //
 
 #pragma once
@@ -11,17 +11,17 @@
 
 namespace ppl
 {
-    class BlurNode : public Node
+    class IntNode : public Node
     {
-        void create_program() const;
+        int val;
         bool is_processed;
 
     public:
-        BlurNode();
+        IntNode(int v);
         std::vector<ppl::any_t> Exec(std::vector<ppl::any_t>);
         std::string Declare() const;
 
-        std::string Name() const { return "BlurNode"; }
+        std::string Name() const { return "IntNode"; }
 
         bool IsProcessed() const { return is_processed; }
         void Processed() { is_processed = true; }

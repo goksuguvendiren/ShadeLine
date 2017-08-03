@@ -27,7 +27,6 @@ namespace ppl
         std::vector<IODirections> edges;
 
         std::vector<ppl::any_t> inputs;
-        std::vector<ppl::any_t> outputs;
         Node* curNode;
 
     public:
@@ -37,5 +36,6 @@ namespace ppl
 
         void Init();
         void Run();
+        bool Complete();
     };
 }

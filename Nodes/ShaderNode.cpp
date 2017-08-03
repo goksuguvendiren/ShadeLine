@@ -18,7 +18,7 @@ ppl::BlurNode::BlurNode()
 
 gl::Program program;
 
-void ppl::BlurNode::create_program(const cv::Mat& image) const
+void ppl::BlurNode::create_program() const
 {
     gl::Shader vertex_shader("../shaders/default_vertex.glsl", gl::Shader::Type::Vertex);
     vertex_shader.Compile();
@@ -35,44 +35,46 @@ void ppl::BlurNode::create_program(const cv::Mat& image) const
     program.Use();
 }
 
+int x = 0;
+
 std::vector<ppl::any_t> ppl::BlurNode::Exec(std::vector<ppl::any_t> inputs)
 {
-    cv::Mat image   = boost::any_cast<cv::Mat>(inputs[0]);
-    int kernel_size = boost::any_cast<int>(inputs[1]);
+    std::cerr << Name() << '\n';
+
+    gl::Texture texture   = boost::any_cast<gl::Texture>(inputs[0]);
+    int kernel_size = 2; //boost::any_cast<int>(inputs[1]);
 
     init_gl_objects();
-    create_program(image);
+    create_program();
 
-    // problematic :
-    gl::Texture texture(image.cols, image.rows, image.data);
     program.LoadTexture(texture, "tex");
 
-    auto frame_buffer = init_frame_buffer(image.cols, image.rows);
+    auto buffer = init_frame_buffer(texture.cols(), texture.rows());
+    auto frame_buffer = buffer.first;
+    auto renderedTexture = buffer.second;
 
     init_attribs(program.ID());
 
-    auto c_loc = program.SetUniform("cols", image.cols);
-    auto r_loc = program.SetUniform("rows", image.rows);
+    auto c_loc = program.SetUniform("cols", texture.cols());
+    auto r_loc = program.SetUniform("rows", texture.rows());
     auto k_loc = program.SetUniform("kernel", kernel_size);
 
-//    while(window.Alive())
-    {
-        program.Render(image.cols, image.rows, frame_buffer);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    program.Render(texture.cols(), texture.rows(), frame_buffer);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-//        window.Loop();
-    }
-
-    cv::Mat out(image.cols, image.rows, CV_8UC3);
-    glPixelStorei(GL_PACK_ALIGNMENT, (out.step & 3) ? 1 : 4);
-    glPixelStorei(GL_PACK_ROW_LENGTH, out.step / out.elemSize());
-
-    glReadPixels(0, 0, out.cols, out.rows, GL_BGR, GL_UNSIGNED_BYTE, out.data);
-    cv::flip(out, out, 0);
+//    cv::Mat out(texture.cols(), texture.rows(), CV_8UC3);
+//    glPixelStorei(GL_PACK_ALIGNMENT, (out.step & 3) ? 1 : 4);
+//    glPixelStorei(GL_PACK_ROW_LENGTH, out.step / out.elemSize());
+//
+//    glReadPixels(0, 0, out.cols, out.rows, GL_RGB, GL_UNSIGNED_BYTE, out.data);
+//    cv::flip(out, out, 0);
+//
+//    cv::imwrite("guzuya_output" + std::to_string(x) + ".png", out);
+//    x++;
 
     is_processed = true;
 
-    return {boost::any(out)};
+    return {boost::any(renderedTexture)};
 }
 
 std::string ppl::BlurNode::Declare() const

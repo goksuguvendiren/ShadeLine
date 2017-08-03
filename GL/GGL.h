@@ -64,7 +64,7 @@ inline auto init_frame_buffer(int cols, int rows)
         std::abort();
 
     assert(!glGetError());
-    return FrameBuffer;
+    return std::make_pair(FrameBuffer, renderedTexture);
 }
 
 void init_attribs(int programID)

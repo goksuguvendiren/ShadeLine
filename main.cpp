@@ -6,6 +6,7 @@
 #include "Nodes/ShaderNode.h"
 #include "Graph.hpp"
 #include "Nodes/TextureNode.h"
+#include "Nodes/IntNode.h"
 
 int main()
 {
@@ -17,14 +18,22 @@ int main()
     ppl::Graph graph;
     ppl::TextureNode texture(image);
     ppl::BlurNode blur_shader;
+    ppl::BlurNode blur_shader1;
 
     graph.AddNode(texture);
     graph.AddNode(blur_shader);
+    graph.AddNode(blur_shader1);
 
     ppl::IODirections direction(&texture, &blur_shader, 0, 0);
+    ppl::IODirections direction1(&blur_shader, &blur_shader1, 0, 0);
     graph.AddEdge(direction);
+    graph.AddEdge(direction1);
 
-    graph.Run();
+    graph.Init();
+    while(!graph.Complete())
+    {
+        graph.Run();
+    }
 
 //    std::vector<ppl::any_t> inputs;
 //    inputs.push_back(boost::any(image));
