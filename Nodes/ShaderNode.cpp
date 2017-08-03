@@ -3,14 +3,22 @@
 //
 
 #include "ShaderNode.h"
-#include "GL/GGL.h"
+#include "../GL/GGL.h"
 
-ppl::Blur::Blur(const gl::Window& win) : window(win)
+//ppl::Blur::Blur(const gl::Window& win) : window(win)
+//{
+//    init_ggl(); // guzu gl
+//}
+
+ppl::BlurNode::BlurNode()
 {
     init_ggl(); // guzu gl
+    is_processed = false;
 }
 
-void ppl::Blur::create_program(const cv::Mat& image)
+gl::Program program;
+
+void ppl::BlurNode::create_program(const cv::Mat& image) const
 {
     gl::Shader vertex_shader("../shaders/default_vertex.glsl", gl::Shader::Type::Vertex);
     vertex_shader.Compile();
@@ -21,13 +29,13 @@ void ppl::Blur::create_program(const cv::Mat& image)
     program.Init();
     program.Attach(vertex_shader);
     program.Attach(fragment_shader);
-//    // Bind Fragment Data before linking the program !!
+    // Bind Fragment Data before linking the program !!
     program.BindFragData({"outColor"});
     program.Link();
     program.Use();
 }
 
-std::vector<ppl::any_t> ppl::Blur::Exec(std::vector<ppl::any_t> inputs)
+std::vector<ppl::any_t> ppl::BlurNode::Exec(std::vector<ppl::any_t> inputs)
 {
     cv::Mat image   = boost::any_cast<cv::Mat>(inputs[0]);
     int kernel_size = boost::any_cast<int>(inputs[1]);
@@ -62,10 +70,12 @@ std::vector<ppl::any_t> ppl::Blur::Exec(std::vector<ppl::any_t> inputs)
     glReadPixels(0, 0, out.cols, out.rows, GL_BGR, GL_UNSIGNED_BYTE, out.data);
     cv::flip(out, out, 0);
 
+    is_processed = true;
+
     return {boost::any(out)};
 }
 
-std::string ppl::Blur::Declare()
+std::string ppl::BlurNode::Declare() const
 {
     return "hi";
 }

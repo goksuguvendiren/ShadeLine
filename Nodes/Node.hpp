@@ -5,7 +5,7 @@
 #pragma once
 
 #include <vector>
-#include "mytypes.h"
+#include "../mytypes.hpp"
 
 namespace ppl
 {
@@ -13,6 +13,9 @@ namespace ppl
     {
     public:
         virtual std::vector<ppl::any_t> Exec(std::vector<ppl::any_t>) = 0;
-        virtual std::string Declare() = 0;
+        virtual std::string Declare() const = 0;
+        virtual std::string Name() const = 0;
+        virtual bool IsProcessed() const = 0;
+        virtual void Processed() = 0;
     };
 }
