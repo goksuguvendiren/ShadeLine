@@ -4,17 +4,17 @@
 
 #include "IntNode.h"
 
-ppl::IntNode::IntNode(int v) : val(v), is_processed(false)
+cf::IntNode::IntNode(int v) : val(v), is_processed(false)
 {}
 
-std::vector<ppl::any_t> ppl::IntNode::Exec(std::vector<ppl::any_t>)
+std::vector<cf::any_t> cf::IntNode::Exec(std::vector<cf::any_t>)
 {
     std::cerr << Name() << '\n';
     is_processed = true;
     return {boost::any(val)};
 }
 
-std::string ppl::IntNode::Declare() const
+std::string cf::IntNode::Declare() const
 {
     return "";
 }

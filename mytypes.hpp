@@ -6,7 +6,7 @@
 
 #include <boost/any.hpp>
 
-namespace ppl
+namespace cf
 {
     using any_t = boost::any;
 }

@@ -1,8 +1,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include <boost/any.hpp>
 
-#include "Nodes/Node.hpp"
+#include "Nodes/node.hpp"
 #include "Nodes/ShaderNode.h"
 #include "Graph.hpp"
 #include "Nodes/TextureNode.h"
@@ -11,31 +10,28 @@
 int main()
 {
     cv::Mat image = cv::imread("kitten.png");
-    cv::cvtColor(image, image, CV_BGR2RGB);
 
     gl::Window win(image.cols, image.rows);
 
-    ppl::Graph graph;
-    ppl::TextureNode texture(image);
-    ppl::BlurNode blur_shader;
-    ppl::BlurNode blur_shader1;
+    cf::graph g;
+    cf::TextureNode texture(image);
+    cf::BlurNode blur_shader;
+    cf::BlurNode blur_shader1;
 
-    graph.AddNode(texture);
-    graph.AddNode(blur_shader);
-    graph.AddNode(blur_shader1);
+    g.AddNode(texture);
+    g.AddNode(blur_shader);
+    g.AddNode(blur_shader1);
 
-    ppl::IODirections direction(&texture, &blur_shader, 0, 0);
-    ppl::IODirections direction1(&blur_shader, &blur_shader1, 0, 0);
-    graph.AddEdge(direction);
-    graph.AddEdge(direction1);
+    g.AddEdge(&texture, &blur_shader, 0, 0);
+    g.AddEdge(&blur_shader, &blur_shader1, 0, 0);
 
-    graph.Init();
-    while(!graph.Complete())
+    g.Init();
+    while(!g.Complete())
     {
-        graph.Run();
+        g.Run();
     }
 
-//    std::vector<ppl::any_t> inputs;
+//    std::vector<cf::any_t> inputs;
 //    inputs.push_back(boost::any(image));
 //    inputs.push_back(boost::any(10));
 //

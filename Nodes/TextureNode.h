@@ -6,17 +6,17 @@
 
 #include <string>
 #include <opencv2/core/mat.hpp>
-#include "Node.hpp"
+#include "node.hpp"
 
-namespace ppl
+namespace cf
 {
-    class TextureNode : public Node
+    class TextureNode : public node
     {
         cv::Mat image;
         bool is_processed;
     public:
         TextureNode(const cv::Mat& source_image);
-        std::vector<ppl::any_t> Exec(std::vector<ppl::any_t>);
+        std::vector<cf::any_t> exec(std::vector<cf::any_t>);
         std::string Declare() const;
 
         std::string Name() const { return "TextureNode"; }

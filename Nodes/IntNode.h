@@ -4,21 +4,21 @@
 
 #pragma once
 
-#include "Node.hpp"
+#include "node.hpp"
 #include "../GL/Program.h"
 #include "../GL/Window.h"
 #include <opencv2/opencv.hpp>
 
-namespace ppl
+namespace cf
 {
-    class IntNode : public Node
+    class IntNode : public node
     {
         int val;
         bool is_processed;
 
     public:
         IntNode(int v);
-        std::vector<ppl::any_t> Exec(std::vector<ppl::any_t>);
+        std::vector<cf::any_t> Exec(std::vector<cf::any_t>);
         std::string Declare() const;
 
         std::string Name() const { return "IntNode"; }

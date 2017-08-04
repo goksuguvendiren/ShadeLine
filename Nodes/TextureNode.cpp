@@ -6,10 +6,10 @@
 #include "TextureNode.h"
 #include "../GL/Texture.h"
 
-ppl::TextureNode::TextureNode(const cv::Mat& source_image) : image(source_image), is_processed(false)
+cf::TextureNode::TextureNode(const cv::Mat& source_image) : image(source_image), is_processed(false)
 {}
 
-std::vector<ppl::any_t> ppl::TextureNode::Exec(std::vector<ppl::any_t>)
+std::vector<cf::any_t> cf::TextureNode::exec(std::vector<cf::any_t>)
 {
     std::cerr << Name() << '\n';
 
@@ -20,7 +20,7 @@ std::vector<ppl::any_t> ppl::TextureNode::Exec(std::vector<ppl::any_t>)
     return {boost::any(texture)};
 }
 
-std::string ppl::TextureNode::Declare() const
+std::string cf::TextureNode::Declare() const
 {
     return "";
 }

@@ -20,7 +20,7 @@ namespace gl
         int cols_;
 
     public:
-        Texture(type<float>, int, int);
+        Texture(type<float>, int cols, int rows);
         Texture(int cols, int rows, uchar* data);
         int rows() { return rows_; }
         int cols() { return cols_; }

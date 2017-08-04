@@ -48,8 +48,11 @@ namespace gl
         glBindTexture(GL_TEXTURE_2D, id);
     }
 
-    Texture::Texture(type<float>, int w, int h)
+    Texture::Texture(type<float>, int cols, int rows)
     {
+        cols_ = cols;
+        rows_ = rows;
+
         GLuint tex;
         glGenTextures(1, &tex);
         id = tex;
@@ -64,7 +67,7 @@ namespace gl
 
         glGenerateMipmap(GL_TEXTURE_2D);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGB, GL_FLOAT, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, cols, rows, 0, GL_RGB, GL_FLOAT, 0);
     }
 
     Texture LoadTexture(const cv::Mat& image)

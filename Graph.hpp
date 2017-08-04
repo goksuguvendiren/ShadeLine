@@ -4,38 +4,53 @@
 
 #pragma once
 
-#include "Nodes/Node.hpp"
+#include <map>
+#include "Nodes/node.hpp"
 
-namespace ppl
+namespace cf
 {
-    struct IODirections
+    struct data_ref
     {
-        Node* source_node;
-        Node* destination_node;
-        int source_index;
-        int destination_index;
-
-        IODirections(Node* s, Node* d, int si, int di) : source_node(s),
-                                                         destination_node(d),
-                                                         source_index(si),
-                                                         destination_index(di) {}
+        uint16_t node_index;
+        uint16_t data_index;
+        bool is_input;
     };
 
-    class Graph
+    struct node_ref
     {
-        std::vector<Node*> nodes;
-        std::vector<IODirections> edges;
+        uint16_t node_index;
 
-        std::vector<ppl::any_t> inputs;
-        Node* curNode;
+        data_ref input(int index)  { return { node_index, index, true }; }
+        data_ref output(int index) { return { node_index, index, false }; }
+    };
+
+    class graph
+    {
+        struct binding
+        {
+            data_ref from, to;
+        };
+
+        std::vector<std::unique_ptr<node>> m_nodes;
+        std::vector<binding> m_bindings;
+        std::vector<bool> m_processed;
+        std::vector<node_ref> m_roots;
+
+        std::map<node_ref, std::string> m_names;
+        std::map<node_ref, std::vector<cf::any_t>> m_outputs;
+
+        node_ref m_proc_node;
 
     public:
-        Graph() = default;
-        void AddNode(Node& node) { nodes.push_back(&node); }
-        void AddEdge(const IODirections& dir) { edges.push_back(dir); }
+        graph() = default;
 
-        void Init();
-        void Run();
-        bool Complete();
+        bool is_complete();
+        void init();
+        void exec_one();
+        node_ref add(std::unique_ptr<node> node, const std::string& name = "");
+        data_ref input(int index);
+        data_ref output(int index);
+
+        void bind(data_ref from, data_ref to);
     };
 }

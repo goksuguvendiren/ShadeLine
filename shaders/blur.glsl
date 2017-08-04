@@ -92,7 +92,7 @@ vec4 mean_filter_3(sampler2D textr, vec2 uv)
 
 void main()
 {
-    vec2 uv = vec2(gl_FragCoord.x, -gl_FragCoord.y) / vec2(cols, rows);
+    vec2 uv = vec2(gl_FragCoord.x, gl_FragCoord.y) / vec2(cols, rows);
     outColor = mean_filter_3(tex, uv);
 
 //    int frag_binary = binarize(frag_lum, threshold_value);
